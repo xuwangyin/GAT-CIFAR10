@@ -16,6 +16,12 @@ First download and extract model checkpoints.
 $ python eval_base_detector.py --epsilon 8.0 --norm Linf --steps 10 --step_size 2.0  --target_class 0 --prefixed \
 models/cifar10_ovr_Linf_8.0_iter40_lr0.5_bs300/class0_ckpt_best/checkpoint-27000
 ```
+
+**Robustness test &mdash; Nattack based Black-box test**
+```
+$ python eval_base_detector_Nattack.py --target_class 0 --prefixed \
+models/cifar10_ovr_Linf_8.0_iter40_lr0.5_bs300/class0_ckpt_best/checkpoint-27000
+```
     
 **Detection performance.** Use eval_detection.py to test the detection performances of integrated detection and generated detection.
 
@@ -30,7 +36,21 @@ $ python synthesis.py --target_class 8 --prefixed \
 models/cifar10_ovr_Linf_8.0_iter40_lr0.5_bs300/class8_ckpt_best/checkpoint-16000
 ```
 
-<img src="class8_synthesis.png" align="middle" width="80%">
+<p align="center"> <img src="class8_synthesis.png"  width="60%"></p>
+
+Images generated with eps16.0 constrained models (using `python synthesis.py --epsilon 25500 --num_steps 200...`)
+
+<p align="center"><img src="synthesized/class0.png"  width="80%"></p>
+<p align="center"><img src="synthesized/class1.png"  width="80%"></p>
+<p align="center"><img src="synthesized/class2.png"  width="80%"></p>
+<p align="center"><img src="synthesized/class3.png"  width="80%"></p>
+<p align="center"><img src="synthesized/class4.png"  width="80%"></p>
+<p align="center"><img src="synthesized/class5.png"  width="80%"></p>
+<p align="center"><img src="synthesized/class6.png"  width="80%"></p>
+<p align="center"><img src="synthesized/class7.png"  width="80%"></p>
+<p align="center"><img src="synthesized/class8.png"  width="80%"></p>
+<p align="center"><img src="synthesized/class9.png"  width="80%"></p>
+
 
 ## Model checkpoints
 Pretrained models include naturally trained classifiers, an adversarially trained classifier, and eps8.0 base detectors.

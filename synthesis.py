@@ -15,7 +15,12 @@ parser.add_argument('--target_class', type=int, required=True)
 parser.add_argument('checkpoint')
 parser.add_argument('--prefixed', action='store_true')
 parser.add_argument('--rows', type=int, default=1)
-parser.add_argument('--cols', type=int, default=10)
+parser.add_argument('--cols', type=int, default=20)
+parser.add_argument('--norm', type=str, choices=['Linf', 'L2'], default='L2')
+parser.add_argument('--epsilon', type=float, default=30*255)
+parser.add_argument('--num_steps', type=int, default=60)
+parser.add_argument('--step_size', type=float, default=0.5*255)
+parser.add_argument('--save_as', type=str)
 args = parser.parse_args()
 
 np.random.seed(123)
@@ -33,11 +38,11 @@ detector_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES,
 detector_saver = tf.train.Saver(var_list=detector_vars)
 
 attack_config = {
-    'epsilon': 30 * 255,
-    'num_steps': 60,
-    'step_size': 0.5 * 255,
+    'epsilon': args.epsilon,
+    'num_steps': args.num_steps,
+    'step_size': args.step_size,
     'random_start': False,
-    'norm': 'L2'
+    'norm': args.norm
 }
 
 attack = PGDAttackDetector(detector, loss_func='cw', **attack_config)
@@ -64,7 +69,7 @@ with tf.Session() as sess:
     # Show Perturbed
     dim, pad = 32, 1
     space = dim + pad
-    fig, ax = plt.subplots(1, 1, figsize=(args.cols, args.rows))
+    fig, ax = plt.subplots(1, 1, figsize=(args.cols, args.rows), dpi=100)
     tiling = np.ones((space * args.rows, space * args.cols, 3), dtype=np.float32) * 255
     for row in range(args.rows):
         for col in range(args.cols):
@@ -72,4 +77,9 @@ with tf.Session() as sess:
                    dim] = synthesized[row * args.cols + col]
     ax.imshow(tiling / 255.0)
     ax.axis('off')
+    if args.save_as:
+        ax.xaxis.set_major_locator(plt.NullLocator())
+        ax.yaxis.set_major_locator(plt.NullLocator())
+        plt.subplots_adjust(top = 1, bottom = 0, right=1, left=0, hspace = 0.05, wspace = 0.05)
+        plt.savefig(args.save_as, dpi=100)
     plt.show()
