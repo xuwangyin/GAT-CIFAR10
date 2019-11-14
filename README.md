@@ -69,4 +69,5 @@ $ wget https://asymmetrical-adversarial-training.s3.amazonaws.com/cifar10/checkp
 $ tar zxvf checkpoints.tar.gz
 $ # eps16 constrained detectors
 $ wget https://asymmetrical-adversarial-training.s3.amazonaws.com/cifar10/checkpoints_eps16.tar.gz
+$ tar zxvf checkpoints_eps16.tar.gz
 ```
