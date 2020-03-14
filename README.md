@@ -1,4 +1,4 @@
-# Asymmetrical Adversarial Training on CIFAR10
+# Generative Adversarial Training on CIFAR10
 
 ## Base detector training
 First download and extract model checkpoints. This will put the pretrained classifier in a designated location.
