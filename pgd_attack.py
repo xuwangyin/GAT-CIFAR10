@@ -29,39 +29,7 @@ class PGDAttack:
       x = np.copy(x_nat).astype(np.float32)
       #x = np.copy(x_nat)
 
-    if verbose:
-      plt.figure(figsize=(10, 10))
     for i in range(self.num_steps):
-      if verbose:
-        # loss, logits = sess.run([self.model.y_xent, self.model.target_logits],
-        #                         feed_dict={self.model.x_input: x, self.model.y_input: y})
-        loss, logits = sess.run([self.model.y_xent, self.model.logits],
-                                feed_dict={self.model.x_input: x, self.model.y_input: y})
-        logits = logits[np.arange(logits.shape[0]), y]
-
-        if self.norm == 'L2':
-          dist = np.squeeze(self._l2_norm(x - x_nat))
-        else:
-          dist = np.max(np.abs(x - x_nat), axis=(1, 2, 3))
-        print('step {}'.format(i), end=': logits ')
-        print(np.round(logits[:5], 3), end='| loss ')
-        print(np.round(loss[:5], 3), end='| dist ')
-        print(np.round(dist[:5], 3))
-        if i % 10 == 0:
-          # M = N = int(np.sqrt(x.shape[0]))
-          ncols = 10
-          nrows = 5
-          dim = 32
-          pad = 1
-          space = dim + pad
-          tiling = np.zeros((space * nrows, space * ncols, 3), dtype=np.float32) + 255.0
-          for row in range(nrows):
-            for col in range(ncols):
-              tiling[row*space: row*space+dim, col*space: col*space+dim] = x[row*ncols+col]
-          plt.imshow(tiling/255.0)
-          plt.axis('off')
-          #plt.show()
-          plt.savefig('painting/img{:04d}.pdf'.format(i//5), bbox_inches='tight', dpi=500)
       if y is None:
         grad = sess.run(self.grad, feed_dict={self.x_input: x})
       else:
